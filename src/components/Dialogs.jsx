@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
 import DialogItem from "./DialogItem";
-import {StyleSheet, Text} from "react-native";
+import {StyleSheet, Text, Alert} from "react-native";
 import {Searchbar} from 'react-native-paper';
 
 const sortyByLastMessage = (b, a) => {
@@ -11,7 +11,10 @@ const sortyByLastMessage = (b, a) => {
     return new Date(a.lastMessage.createdAt) - new Date(b.lastMessage.createdAt);
 }
 
-const Dialogs = ({items, userId, onSearch, inputValue}) => {
+const Dialogs = ({items, userId, onSearch, inputValue, navigation}) => {
+    const onOpenMessages = () => {
+        navigation.navigate('Message');
+    };
     items = [{
         _id: "12331sdaw2",
         lastMessage: {text: "Привет, как дела?", createdAt: "2020-12-18T21:23:53.937+00:00"},
@@ -49,9 +52,6 @@ const Dialogs = ({items, userId, onSearch, inputValue}) => {
     };
     return (
         <Container>
-            <HeaderContainer>
-                <Header>Чаты</Header>
-            </HeaderContainer>
             <Searchbar
                 placeholder="Search"
                 onChangeText={onChangeSearch}
@@ -63,6 +63,7 @@ const Dialogs = ({items, userId, onSearch, inputValue}) => {
                         // const dialogPartner = item.partner._id !== userId ? item.partner : item.author;
                         return (
                             <DialogItem
+                                onOpenDialog={onOpenMessages}
                                 _id={item._id}
                                 // onSelect={onSelectDialog}
                                 key={item._id}
@@ -110,7 +111,6 @@ Dialogs.defaultProps = {
 
 const styles = StyleSheet.create({
     search: {
-        marginTop: 15,
         shadowOpacity: 0,
         backgroundColor: '#f9f9f9'
     }

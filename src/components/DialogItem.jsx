@@ -17,9 +17,9 @@ const getMessageTime = createdAt => {
 };
 
 
-const DialogItem = ({_id, isMe, currentDialogId, partner, lastMessage, userId, onSelect}) => {
+const DialogItem = ({_id, isMe, currentDialogId, partner, lastMessage, userId, onSelect, onOpenDialog}) => {
     return (
-        <DialogItemComponent>
+        <DialogItemComponent onPress={onOpenDialog}>
             <Avatar source={{
                 // uri: 'https://png.pngtree.com/png-vector/20191018/ourlarge/pngtree-cute-dolphin-avatar-with-a-yellow-background-png-image_1770344.jpg'
                 uri: partner.avatar
