@@ -52,6 +52,9 @@ const Dialogs = ({items, userId, onSearch, inputValue, navigation}) => {
     };
     return (
         <Container>
+            <HeaderContainer>
+                <Header>Чаты</Header>
+            </HeaderContainer>
             <Searchbar
                 placeholder="Search"
                 onChangeText={onChangeSearch}
@@ -112,7 +115,8 @@ Dialogs.defaultProps = {
 const styles = StyleSheet.create({
     search: {
         shadowOpacity: 0,
-        backgroundColor: '#f9f9f9'
+        backgroundColor: '#f9f9f9',
+        marginTop: 15
     }
 });
 
