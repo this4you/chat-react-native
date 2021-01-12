@@ -1,12 +1,13 @@
 import React, {useRef} from 'react';
-import {Text, View, ScrollView} from "react-native";
+import {StyleSheet, KeyboardAvoidingView} from "react-native";
+import { Item, Input } from 'native-base';
+import {IconButton, Colors } from "react-native-paper";
 import {Message} from "../components";
 import styled from "styled-components/native";
-
 const MessageScreen = () => {
     const scrollViewRef = useRef();
     return (
-        <View>
+        <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={5}>
             <HeaderContainer>
                 <HeaderView/>
                 <InfoContainer>
@@ -19,25 +20,55 @@ const MessageScreen = () => {
                     }}/>
                 </AvatarContainer>
             </HeaderContainer>
-            <MessagesContainer  ref={scrollViewRef}
-                         onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
-                <Message text={"Привет, как твои дела? Что будешь делать на выходные, может сходим в кино?=)"} isMe/>
-                <Message text={"Ты тут?"} isMe/>
-                <Message text={"Привет! Я супер, очень рад тебя слышать!"}/>
-                <Message text={"Кончено, буду рад тебя видеть!"}/>
-                <Message text={"Как тебе последние Мстители?"} isMe/>
-                <Message text={"Что думаешь на счет Железного человека?"} isMe/>
-                <Message
-                    text={"Мне очень понравилось, круты реплики главных актеров и очень офигенная игра, все супер!!"}/>
-                <Message text={"А как тебе Шерлок?"}/>
-                <Message text={"ОФИГЕННО!"} isMe/>
-            </MessagesContainer>
-        </View>
+                <MessagesContainer ref={scrollViewRef}
+                                   onContentSizeChange={() => scrollViewRef.current.scrollToEnd({animated: true})}>
+                    <Message text={"Привет, как твои дела? Что будешь делать на выходные, может сходим в кино?=)"}
+                             isMe/>
+                    <Message text={"Ты тут?"} isMe/>
+                    <Message text={"Привет! Я супер, очень рад тебя слышать!"}/>
+                    <Message text={"Кончено, буду рад тебя видеть!"}/>
+                    <Message text={"Как тебе последние Мстители?"} isMe/>
+                    <Message text={"Что думаешь на счет Железного человека?"} isMe/>
+                    <Message
+                        text={"Мне очень понравилось, круты реплики главных актеров и очень офигенная игра, все супер!!"}/>
+                    <Message text={"А как тебе Шерлок?"}/>
+                    <Message text={"ОФИГЕННО!"} isMe/>
+                </MessagesContainer>
+                <ChatInputContainer>
+                    <IconButton
+                        icon="file"
+                        size={27}
+                        color={Colors.grey600}
+                        onPress={() => console.log('Pressed')}
+                    />
+                    <Item rounded style={styles.inputText}>
+                        <Input placeholder='Сообщение...'/>
+                    </Item>
+                    <IconButton
+                        icon="send"
+                        size={27}
+                        color={Colors.blueA200}
+                        onPress={() => console.log('Pressed')}
+                    />
+                </ChatInputContainer>
+        </KeyboardAvoidingView>
+
     );
 }
+const styles = StyleSheet.create({
+    inputText: {
+        width: '76%'
+    }
+});
+
+const ChatInputContainer = styled.View`
+    padding-top: 10px;
+    justify-content: space-around;
+    flex-direction: row;
+`;
 
 const MessagesContainer = styled.ScrollView`
-    height: 80%
+    max-height: 80%;
 `;
 const InfoContainer = styled.View`
     justify-content: space-around;
@@ -73,4 +104,5 @@ const HeaderContainer = styled.View`
 const HeaderView = styled.View`
     width: 23%;
 `;
+
 export default MessageScreen;

@@ -55,12 +55,14 @@ const Dialogs = ({items, userId, onSearch, inputValue, navigation}) => {
             <HeaderContainer>
                 <Header>Чаты</Header>
             </HeaderContainer>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                value={searchQuery}
-                style={styles.search}
-            />
+            <SearchContainer>
+                <Searchbar
+                    placeholder="Search"
+                    onChangeText={onChangeSearch}
+                    value={searchQuery}
+                    style={styles.search}
+                />
+            </SearchContainer>
             <Dialog>
                 {filtered && filtered.length ? filtered.sort(sortyByLastMessage).map(item => {
                         // const dialogPartner = item.partner._id !== userId ? item.partner : item.author;
@@ -116,10 +118,14 @@ const styles = StyleSheet.create({
     search: {
         shadowOpacity: 0,
         backgroundColor: '#f9f9f9',
-        marginTop: 15
+        marginTop: 15,
+        borderRadius: 30,
+        width: '90%'
     }
 });
-
+const SearchContainer = styled.View`
+    align-items: center;
+`;
 const Header = styled.Text`
     font-weight: 800;
     font-size: 20px;
