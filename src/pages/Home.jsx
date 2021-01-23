@@ -1,8 +1,11 @@
-import React from 'react';
-import {Dialogs} from "../components/";
+import React, {useEffect} from 'react';
+import {Dialogs} from "../containers/";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { Text, View } from 'react-native';
+import {connect} from "react-redux";
+import {userActions} from "../redux/actions";
+import socket from "../core/socket";
 
 function Settings() {
     return (
@@ -14,7 +17,19 @@ function Settings() {
 
 const Tab = createBottomTabNavigator();
 
-const Home = () => {
+const Home = ({fetchUserData, currentUserId}) => {
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        if (currentUserId) {
+            console.log("start join");
+            socket.emit('join', currentUserId.toString());
+        }
+    }, [currentUserId]);
+
     return (
         <Tab.Navigator
             initialRouteName="Chats"
@@ -45,4 +60,4 @@ const Home = () => {
         </Tab.Navigator>
     );
 }
-export default Home;
+export default  connect(({ users }) => ({ currentUserId: users.data && users.data._id }), userActions)(Home);

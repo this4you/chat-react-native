@@ -2,9 +2,12 @@ import React, {useRef} from 'react';
 import {StyleSheet, KeyboardAvoidingView} from "react-native";
 import { Item, Input } from 'native-base';
 import {IconButton, Colors } from "react-native-paper";
+import { connect } from "react-redux";
 import {Message} from "../components";
 import styled from "styled-components/native";
-const MessageScreen = () => {
+import SyncStorage from 'sync-storage';
+
+const MessageScreen = ({token}) => {
     const scrollViewRef = useRef();
     return (
         <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={5}>
@@ -39,7 +42,9 @@ const MessageScreen = () => {
                         icon="file"
                         size={27}
                         color={Colors.grey600}
-                        onPress={() => console.log('Pressed')}
+                        onPress={() => {
+                            SyncStorage.set('foo', 'bar');
+                        }}
                     />
                     <Item rounded style={styles.inputText}>
                         <Input placeholder='Сообщение...'/>
@@ -48,7 +53,10 @@ const MessageScreen = () => {
                         icon="send"
                         size={27}
                         color={Colors.blueA200}
-                        onPress={() => console.log('Pressed')}
+                        onPress={() => {
+                            const result = SyncStorage.get('foo');
+                            console.log(result + ": Result");
+                        }}
                     />
                 </ChatInputContainer>
         </KeyboardAvoidingView>
@@ -105,4 +113,4 @@ const HeaderView = styled.View`
     width: 23%;
 `;
 
-export default MessageScreen;
+export default connect(({ users }) => ({ token: users.token }))(MessageScreen);

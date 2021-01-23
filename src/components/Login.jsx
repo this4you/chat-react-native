@@ -1,24 +1,15 @@
-import React, { Component, useState } from 'react';
-import axios from 'axios';
-import { Alert, Button, TextInput, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import {Button, TextInput, View, StyleSheet } from 'react-native';
+import {connect} from "react-redux";
+import {userActions} from "../redux/actions";
 
-const Login = ({history}) => {
+const Login = ({fetchUserLogin}) => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
     const onLogin = () => {
-        axios.post("http://192.168.0.111:3003/user/signin", {
-            email: login,
-            password: password
-        })
-            .then(({data}) => {
-                const {status, token} = data;
-                Alert.alert('Token: ' + token);
-                history.push('/home');
-            })
-            .catch(err => {
-                    Alert.alert('Error');
-            })
+        const postData = {email: login, password: password}
+        fetchUserLogin(postData);
     }
 
     return (
@@ -45,7 +36,7 @@ const Login = ({history}) => {
         </View>
     );
 }
-export default Login;
+export default  connect(({ users }) => ({ token: users.token }), userActions)(Login);
 
 
 const styles = StyleSheet.create({

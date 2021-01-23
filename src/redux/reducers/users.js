@@ -1,7 +1,9 @@
+import SyncStorage from 'sync-storage';
+
 const initialState = {
     data: null,
-    token: "test",
-    isAuth: ""
+    token: SyncStorage.get('token') || "",
+    isAuth: false
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -11,7 +13,7 @@ export default (state = initialState, { type, payload }) => {
                 ...state,
                 data: payload,
                 isAuth: true,
-                token: window.localStorage.token
+                token: SyncStorage.get('token')
             };
         case "USER:SET_IS_AUTH":
             return {

@@ -1,4 +1,5 @@
 import {axios} from '../../core/'
+//import AsyncStorage from '@react-native-community/async-storage';
 
 export default {
     signIn: postData => axios.post("/user/signin", postData),

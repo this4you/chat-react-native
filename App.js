@@ -1,17 +1,12 @@
 import React from 'react';
-import {HomePage} from "./src/pages";
-import {NavigationContainer} from "@react-navigation/native";
-import {createStackNavigator} from '@react-navigation/stack';
-import {Text, View} from "react-native";
-import {MessagesPage} from "./src/pages";
+import {Provider} from 'react-redux';
+import NavigateComponent from './src/core/NavigateComponent';
 
-const Stack = createStackNavigator();
+import store from './src/redux/store';
+
 const App = () => (
-    <NavigationContainer>
-        <Stack.Navigator headerMode='none'>
-            <Stack.Screen name="Home" component={HomePage}/>
-            <Stack.Screen name="Message" component={MessagesPage}/>
-        </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+        <NavigateComponent/>
+    </Provider>
 );
 export default App;

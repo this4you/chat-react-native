@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import format from 'date-fns/format';
 import isToday from 'date-fns/isToday';
 import parseISO from 'date-fns/parseISO';
-
+import getAvatarColor from '../utils/getAvatarColor';
 const getMessageTime = createdAt => {
     if (createdAt) {
         createdAt = parseISO(createdAt);
@@ -17,17 +17,23 @@ const getMessageTime = createdAt => {
 };
 
 
-const DialogItem = ({_id, isMe, currentDialogId, partner, lastMessage, userId, onSelect, onOpenDialog}) => {
+const DialogItem = ({_id, isMe, partner, lastMessage, onOpenDialog}) => {
+    const avatarColors = getAvatarColor(partner.fullName[0].toUpperCase());
     return (
         <DialogItemComponent onPress={onOpenDialog}>
-            <Avatar source={{
-                // uri: 'https://png.pngtree.com/png-vector/20191018/ourlarge/pngtree-cute-dolphin-avatar-with-a-yellow-background-png-image_1770344.jpg'
-                uri: partner.avatar
-            }}/>
-            <View>
+            <Avatar
+                style={{
+                    backgroundColor: avatarColors.background
+                }}
+            >
+                <Letter style={{ color: avatarColors.color }}>
+                    {partner.fullName[0].toUpperCase()}
+                </Letter>
+            </Avatar>
+            <LastMessage>
                 <FullName>{partner.fullName}</FullName>
-                <GrayText>{lastMessage.text}</GrayText>
-            </View>
+                <GrayText>{isMe ? `Вы: ${lastMessage.text}` : lastMessage.text}</GrayText>
+            </LastMessage>
             <DialogInfo>
                 <DialogDate>{getMessageTime(lastMessage && lastMessage.createdAt)}</DialogDate>
                 <MessagesCount><MessagesCountText>2</MessagesCountText></MessagesCount>
@@ -44,7 +50,9 @@ const DialogItemComponent = styled.TouchableOpacity`
     border-bottom-width: 1px;
     border-bottom-color: #f3f3f3;
 `;
-
+const LastMessage = styled.View`
+    max-width: 225px;
+`;
 const DialogInfo = styled.View`
     flex: 1;
     align-items: flex-end;
@@ -79,10 +87,19 @@ const FullName = styled.Text`
     font-size: 16px;
 `;
 
-const Avatar = styled.Image`
+const Avatar = styled.View`
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
     margin-right: 11px;
     margin-left: 11px;
     border-radius: 50px;
     width: 60px;
     height: 60px;
+`;
+
+const Letter = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -1px;
 `;

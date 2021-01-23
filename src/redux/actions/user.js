@@ -1,5 +1,8 @@
 import {userApi} from "../../utils/api";
-import {message} from "antd";
+import SyncStorage from 'sync-storage';
+import {Alert} from "react-native";
+// import AsyncStorage
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Actions = {
     setUserData: data => ({
@@ -30,18 +33,16 @@ const Actions = {
             .then(({data}) => {
                 const {status, token} = data;
                 if (status === "error") {
-                    message.error("Неправильный email или пароль");
+                    Alert.alert("Неправильный email или пароль");
                 } else {
-                    localStorage.token = token;
-                    window.axios.defaults.headers.common['token'] = token;
-                    window.localStorage['token'] = token;
-                    dispatch(Actions.fetchUserData());
-                    dispatch(Actions.setIsAuth(true));
+                    AsyncStorage.setItem("token", token).then(() => {
+                        dispatch(Actions.setIsAuth(true));
+                    });
                 }
                 return data;
             })
             .catch(({response}) => {
-                message.error("Неправильный email или пароль");
+                Alert.alert("Ошибка сервиса авторизации");
             });
     },
     fetchUserRegister: postData => () => {
