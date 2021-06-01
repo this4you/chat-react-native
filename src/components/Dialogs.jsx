@@ -1,11 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import DialogItem from "./DialogItem";
-import {StyleSheet, Text} from "react-native";
+import {StyleSheet} from "react-native";
+import {IconButton, Colors} from "react-native-paper";
 import {Searchbar} from 'react-native-paper';
 import {connect} from "react-redux";
 import {dialogsActions} from "../redux/actions";
-import socket from "../core/socket";
+import SyncStorage from "sync-storage";
 
 const sortyByLastMessage = (b, a) => {
     if (!a.lastMessage || !b.lastMessage) {
@@ -14,18 +15,26 @@ const sortyByLastMessage = (b, a) => {
     return new Date(a.lastMessage.createdAt) - new Date(b.lastMessage.createdAt);
 }
 
-const Dialogs = ({onChangeSearch, searchQuery, currentUserId, filtered, onOpenMessages}) => {
+const Dialogs = ({onChangeSearch, searchQuery, currentUserId, filtered, onOpenMessages, navigation}) => {
     return (
         <Container>
             <HeaderContainer>
-                <Header>Чаты</Header>
+                <Header>Чати</Header>
             </HeaderContainer>
             <SearchContainer>
                 <Searchbar
-                    placeholder="Search"
+                    placeholder="Пошук"
                     onChangeText={onChangeSearch}
                     value={searchQuery}
                     style={styles.search}
+                />
+                <IconButton
+                    icon="comment"
+                    size={27}
+                    color={Colors.grey600}
+                    onPress={() => {
+                        navigation.navigate("CreateDialogPage");
+                    }}
                 />
             </SearchContainer>
             <Dialog>
@@ -33,7 +42,7 @@ const Dialogs = ({onChangeSearch, searchQuery, currentUserId, filtered, onOpenMe
                         const dialogPartner = item.partner._id !== currentUserId ? item.partner : item.author;
                         return (
                             <DialogItem
-                                onOpenDialog={onOpenMessages}
+                                onOpenDialog={() => onOpenMessages(item._id)}
                                 _id={item._id}
                                 key={item._id}
                                 isMe={item.lastMessage && item.lastMessage.user._id === currentUserId}
@@ -42,7 +51,9 @@ const Dialogs = ({onChangeSearch, searchQuery, currentUserId, filtered, onOpenMe
                             />
                         )
                     }) :
-                    <Text>Ничего не найдено</Text>
+                    <NeedCreateDialog>
+                        <NeedCreateDialogText>Створіть перший діалог</NeedCreateDialogText>
+                    </NeedCreateDialog>
                 }
             </Dialog>
         </Container>
@@ -63,12 +74,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
         marginTop: 15,
         borderRadius: 30,
-        width: '90%'
+        width: '80%'
     }
 });
 const SearchContainer = styled.View`
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
 `;
+
+
 const Header = styled.Text`
     font-weight: 800;
     font-size: 20px;
@@ -82,3 +97,10 @@ const Container = styled.View`
    flex: 1;
    margin-top: 50px;
 `;
+
+const NeedCreateDialog = styled.View`
+    margin-top: 70%;
+    justify-content: center;
+    align-items: center;    
+`;
+const NeedCreateDialogText = styled.Text``;

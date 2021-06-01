@@ -6,16 +6,26 @@ import {dialogsActions} from "../redux/actions";
 import socket from "../core/socket";
 import {Dialogs} from "../components";
 
-const DialogsContainer = ({dialogs, navigation, fetchDialogs, currentUserId}) => {
+const DialogsContainer = ({dialogs, navigation, fetchDialogs, currentUserId, setCurrentDialogId}) => {
     const {items = []} = dialogs;
-    const onOpenMessages = () => {
+    const onOpenMessages = (dialogId) => {
+        setCurrentDialogId(dialogId);
         navigation.push('Message');
     };
     useEffect(() => {
         fetchDialogs();
-        socket.on('SERVER:MESSAGE_CREATED', () => {
+        socket.on('SERVER:MESSAGE_NEW', () => {
             fetchDialogs();
         });
+
+        socket.on('SERVER:DIALOG_CREATED', () => {
+            fetchDialogs();
+        });
+
+        return  () => {
+            socket.removeAllListeners('SERVER:MESSAGE_NEW');
+            socket.removeAllListeners('SERVER:DIALOG_CREATED');
+        };
     }, []);
 
     useEffect(() => {
@@ -38,7 +48,7 @@ const DialogsContainer = ({dialogs, navigation, fetchDialogs, currentUserId}) =>
     };
     return (
         <Dialogs onChangeSearch={onChangeSearch} searchQuery={searchQuery} currentUserId={currentUserId}
-                 filtered={filtered} onOpenMessages={onOpenMessages}/>
+                 filtered={filtered} onOpenMessages={onOpenMessages} navigation={navigation}/>
     );
 }
 export default connect(({dialogs, users}) => ({

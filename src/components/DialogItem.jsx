@@ -29,6 +29,7 @@ const DialogItem = ({_id, isMe, partner, lastMessage, onOpenDialog}) => {
                 <Letter style={{ color: avatarColors.color }}>
                     {partner.fullName[0].toUpperCase()}
                 </Letter>
+                {partner.isOnline && <Online/>}
             </Avatar>
             <LastMessage>
                 <FullName>{partner.fullName}</FullName>
@@ -36,13 +37,22 @@ const DialogItem = ({_id, isMe, partner, lastMessage, onOpenDialog}) => {
             </LastMessage>
             <DialogInfo>
                 <DialogDate>{getMessageTime(lastMessage && lastMessage.createdAt)}</DialogDate>
-                <MessagesCount><MessagesCountText>2</MessagesCountText></MessagesCount>
+                <MessagesCount><MessagesCountText>1</MessagesCountText></MessagesCount>
             </DialogInfo>
         </DialogItemComponent>
     );
 }
 export default DialogItem;
-
+const Online = styled.View`
+    width: 20px;
+    height: 20px;
+    bottom: -1px;
+    right: 0;
+    border: 3px solid #fff;
+    position: absolute;
+    background: #00c980;
+    border-radius: 20px;
+`;
 const DialogItemComponent = styled.TouchableOpacity`
     flex-direction: row;
     align-items: center;
@@ -59,7 +69,7 @@ const DialogInfo = styled.View`
     margin-right: 4px
 `;
 const DialogDate = styled.Text`
-    font-size: 13px
+    font-size: 12px
     `;
 const MessagesCountText = styled.Text`
     text-align: center;
@@ -80,6 +90,7 @@ const MessagesCount = styled.View`
 const GrayText = styled.Text`
     font-size: 16px;
     color: #8b979f;
+    max-height: 30px;
 `;
 
 const FullName = styled.Text`

@@ -1,15 +1,24 @@
 import React from 'react';
 import styled from "styled-components/native";
-
-const Message = ({text, isMe}) => {
+import distanceInWordsToNow from 'date-fns/formatDistanceToNowStrict';
+import ruLocale from "date-fns/esm/locale/uk";
+const Message = ({text, isMe, date}) => {
     return (
         <MessageContainer isMe={isMe}>
             <BubbleContainer isMe={isMe}>
                 <MessageText isMe={isMe}>{text}</MessageText>
             </BubbleContainer>
+            <DateContainer  isMe={isMe}>
+                {distanceInWordsToNow(new Date(date), {addSuffix: true, locale: ruLocale})}
+            </DateContainer>
         </MessageContainer>
     );
 }
+const DateContainer= styled.Text`
+    text-align: ${props => props.isMe ? "left": "right"};
+    margin-left: ${props => props.isMe ? "15px": 0};
+    margin-right: ${props => props.isMe ? 0: "15px"};
+`;
 const MessageText = styled.Text`
     color: ${props => props.isMe ? "white" : "black"};
     font-size: 17px;

@@ -13,6 +13,6 @@ axios.interceptors.request.use(
     error => {
         return Promise.reject(error)
     });
-axios.defaults.baseURL = "http://192.168.0.105:3003";
+axios.defaults.baseURL = "http://192.168.0.100:3003";
 axios.defaults.headers.common["token"] = SyncStorage.get("token") || "";
 export default axios;

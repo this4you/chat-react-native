@@ -17,7 +17,7 @@ function Settings() {
 
 const Tab = createBottomTabNavigator();
 
-const Home = ({fetchUserData, currentUserId}) => {
+const Home = ({fetchUserData, currentUserId, navigation}) => {
 
     useEffect(() => {
         fetchUserData();
@@ -41,7 +41,7 @@ const Home = ({fetchUserData, currentUserId}) => {
                 name="Chats"
                 component={Dialogs}
                 options={{
-                    tabBarLabel: 'Чаты',
+                    tabBarLabel: 'Чати',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="chat" color={color} size={size} />
                     ),
@@ -51,7 +51,7 @@ const Home = ({fetchUserData, currentUserId}) => {
                 name="Settings"
                 component={Settings}
                 options={{
-                    tabBarLabel: 'Настройки',
+                    tabBarLabel: 'Налаштування',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="bell" color={color} size={size} />
                     ),

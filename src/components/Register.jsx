@@ -1,28 +1,45 @@
 import React, {useState} from 'react';
-import {Button, TextInput, View, StyleSheet, Text, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {TextInput, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
 import {connect} from "react-redux";
 import {userActions} from "../redux/actions";
 import styled from "styled-components/native/dist/styled-components.native.esm";
 
-const Login = ({fetchUserLogin, navigation}) => {
+const Register = ({fetchUserRegister, navigation}) => {
     const [login, setLogin] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordR, setPasswordR] = useState("");
 
-    const onLogin = () => {
-        const postData = {email: login, password: password}
-        fetchUserLogin(postData);
+    const onRegister = () => {
+        fetchUserRegister({
+            email: login,
+            fullName: name,
+            password: password
+        }).then(({data}) => {
+            if (data.name === "MongoError") {
+                Alert.alert("Помилка реєстрації");
+            } else {
+                navigation.navigate("SignIn");
+            }
+        });
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
-                <LoginHeader>Авторизуватися</LoginHeader>
-                <LoginPlaceholderHeader>Будь ласка, авторизуйтесь</LoginPlaceholderHeader>
+                <LoginHeader>Реєстрація</LoginHeader>
+                <LoginPlaceholderHeader>Для входу в чат вам необхідно зареєструватися</LoginPlaceholderHeader>
                 <InputArea>
                     <TextInput
                         value={login}
                         onChangeText={(login) => setLogin(login)}
                         placeholder={'Email'}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        value={name}
+                        onChangeText={(name) => setName(name)}
+                        placeholder={"Ваше ім'я"}
                         style={styles.input}
                     />
                     <TextInput
@@ -32,25 +49,31 @@ const Login = ({fetchUserLogin, navigation}) => {
                         secureTextEntry={true}
                         style={styles.input}
                     />
+                    <TextInput
+                        value={passwordR}
+                        onChangeText={(password) => setPasswordR(password)}
+                        placeholder={'Повторіть пароль'}
+                        secureTextEntry={true}
+                        style={styles.input}
+                    />
                     <SingInButton
                         title={'Ввійти в акаунт'}
                         //color="#9C27B0"
                         //background-color="#9C27B0"
                         //style={styles.loginScreenButton}
-                        onPress={onLogin}
+                        onPress={onRegister}
                     >
-                        <SingInButtonText>Ввійти в акаунт</SingInButtonText>
+                        <SingInButtonText>Зареєструватися</SingInButtonText>
                     </SingInButton>
-                    <SingUpButton
-                        onPress={() => navigation.navigate("SignUp")}>
-                        <SingUpButtonText>Зареєструватися</SingUpButtonText>
+                    <SingUpButton>
+                        <SingUpButtonText>Ввійти в акаунт</SingUpButtonText>
                     </SingUpButton>
                 </InputArea>
             </View>
         </TouchableWithoutFeedback>
     );
 }
-export default connect(({users}) => ({token: users.token}), userActions)(Login);
+export default connect(({users}) => ({token: users.token}), userActions)(Register);
 
 
 const styles = StyleSheet.create({
@@ -89,6 +112,7 @@ const LoginHeader = styled.Text`
 const LoginPlaceholderHeader = styled.Text`
     font-weight: 200;
     font-size: 18px;
+    text-align: center;
     margin-bottom: 30px;
 `;
 
@@ -98,7 +122,7 @@ const InputArea = styled.View`
     justify-content: center;
     align-items: center;
     width: 80%;
-    height: 30%;
+    height: 40%;
 `;
 
 const SingInButton = styled.TouchableOpacity`
